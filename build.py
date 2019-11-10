@@ -1,6 +1,7 @@
 # Note this file originated from ./scriptArchive/build_advanced2.py
 
 
+# This is a list of dictionaries that contain data about my pages
 pages = [
   {
     "content" : "content/index.html",
@@ -40,27 +41,45 @@ pages = [
   },
 ]
 
-def main():
-  whole_page_template = open('templates/whole_page_template.html').read()
+
+# set template takes the file name of a template file, 
+# reads it and uses that to creates a object of Type Template
+def set_template(template_file):
+  page_template = open(template_file).read()
   from string import Template
-  template = Template(whole_page_template)
+  my_template = Template(page_template)
+  return my_template
 
+# apply_template takes a Template object and all of the 
+# template replacement strings for a page and returns 
+# the new page with the templated values replaced with the replacement strings
+def apply_template(page_template, content, title, aIndex, aSpaces, aEvents, aAbout):
+  print("applying template to:", title)
+  print("----> Taking this content:",content)
+  page_content = open(content).read()
+  full_page = page_template.safe_substitute(
+    PAGE_TITLE=title,
+    ACTIVE_INDEX=aIndex,
+    ACTIVE_SPACES=aSpaces,
+    ACTIVE_EVENTS=aEvents,
+    ACTIVE_ABOUT=aAbout,
+    PAGE_CONTENT=page_content   
+  )
+  return full_page
+
+# write_file takes html content (or really any content) and an output file to write to
+def write_file(html_page, output):
+  print("----> Writing the output to", output)
+  open(output, 'w+').write(html_page)
+
+
+# Main
+def main():
+  template = set_template('templates/whole_page_template.html')
   for page in pages:
-    print("creating:", page["PAGE_TITLE"])
-    print("----> Taking this content:",page["content"])
-    page_content = open(page["content"]).read()
-    full_page = template.safe_substitute(
-      PAGE_TITLE=page["PAGE_TITLE"],
-      ACTIVE_INDEX=page["ACTIVE_INDEX"],
-      ACTIVE_SPACES=page["ACTIVE_INDEX"],
-      ACTIVE_EVENTS=page["ACTIVE_INDEX"],
-      ACTIVE_ABOUT=page["ACTIVE_INDEX"],
-      PAGE_CONTENT=page_content 
-    )
-    print("----> Writing the output to", page["output"])
-    open(page["output"], 'w+').write(full_page)
-    print("------------------------")
-
+    full_page = apply_template(template, page["content"], page["PAGE_TITLE"], page["ACTIVE_INDEX"], page["ACTIVE_SPACES"], page["ACTIVE_EVENTS"], page["ACTIVE_ABOUT"])
+    write_file(full_page, page["output"])
+    
   
 if __name__ == "__main__":
   main()
