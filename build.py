@@ -2,11 +2,19 @@
 
 
 # This is a list of dictionaries that contain data about my pages
+page_links = {
+  "index_link" : "./index.html",
+  "spaces_link" : "./spaces.html",
+  "events_link" : "./events.html",
+  "about_link" : "./about.html",  
+}
+
 pages = [
   {
     "content" : "content/index.html",
     "output" : "docs/index.html",
     "PAGE_TITLE" : "WELCOME",
+    "page_link" : "./index.html",
     "ACTIVE_INDEX" : "active",
     "ACTIVE_SPACES" : "",
     "ACTIVE_EVENTS" : "",
@@ -15,6 +23,7 @@ pages = [
   {
     "content" : "content/spaces.html",
     "output" : "docs/spaces.html",
+    "page_link" : "./spaces.html",
     "PAGE_TITLE" : "SPACES",
     "ACTIVE_INDEX" : "",
     "ACTIVE_SPACES" : "active",
@@ -24,6 +33,7 @@ pages = [
   {
     "content" : "content/events.html",
     "output" : "docs/events.html",
+    "page_link" : "./events.html",
     "PAGE_TITLE" : "EVENTS",
     "ACTIVE_INDEX" : "",
     "ACTIVE_SPACES" : "",
@@ -33,6 +43,7 @@ pages = [
   {
     "content" : "content/about.html",
     "output" : "docs/about.html",
+    "page_link" : "./about.html",
     "PAGE_TITLE" : "ABOUT",
     "ACTIVE_INDEX" : "",
     "ACTIVE_SPACES" : "",
@@ -54,6 +65,7 @@ def set_template(template_file):
 # template replacement strings for a page and returns 
 # the new page with the templated values replaced with the replacement strings
 def apply_template(page_template, content, title, aIndex, aSpaces, aEvents, aAbout):
+  from datetime import datetime 
   print("applying template to:", title)
   print("----> Taking this content:",content)
   page_content = open(content).read()
@@ -63,7 +75,13 @@ def apply_template(page_template, content, title, aIndex, aSpaces, aEvents, aAbo
     ACTIVE_SPACES=aSpaces,
     ACTIVE_EVENTS=aEvents,
     ACTIVE_ABOUT=aAbout,
-    PAGE_CONTENT=page_content   
+    PAGE_CONTENT=page_content,
+    COPYRIGHT_YEAR=datetime.now().year,
+    INDEX_LINK=page_links["index_link"],
+    SPACES_LINK=page_links["spaces_link"],
+    EVENTS_LINK=page_links["events_link"],
+    ABOUT_LINK=page_links["about_link"],
+
   )
   return full_page
 
