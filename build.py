@@ -65,13 +65,13 @@ spaces = [
     "output" : "docs/queen_hippie_gypsy.html",
     "SPACE_LOGO" : "./images/spaces/qhg_storefront.jpg",
     "SPACE_NAME" : "Queen Hippie Gypsy",
-    "SPACE_IMAGE" : "/images/spaces/qhg_kyrah_eventspace.jpg",
+    "SPACE_IMAGE" : "./images/spaces/qhg_kyrah_eventspace.jpg",
     "SPACE_PAGE_LINK" : "./queen_hippie_gypsy.html",
   },
   {
     "content" : "spaces/SAE_Expression_College.html",
     "output" : "docs/SAE_Expression_College.html",
-    "SPACE_LOGO" : "./images/spaces/sae_logo.jpg,",
+    "SPACE_LOGO" : "./images/spaces/sae_logo.jpg",
     "SPACE_NAME" : "SAE Expression College",
     "SPACE_IMAGE" : "./images/spaces/sae_outdoor.jpg",
     "SPACE_PAGE_LINK" : "./SAE_Expression_College.html",
@@ -231,8 +231,7 @@ def apply_space_template(space_template, space_template_dict, fullpage_template,
     SPACE_PAGE_LINK = space_template_dict["SPACE_PAGE_LINK"],
     SPACE_DESCRIPTION = space_short_content[0]
   )
-  print(space_entry)
-  chad = input("SPACE ENTRY ^^^^")
+  
   # Create the new space pages here
   individual_space_page = apply_fullpage_template(fullpage_template, space_detailed_content[0], page)
   write_file(individual_space_page, space_template_dict["output"])
