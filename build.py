@@ -157,6 +157,9 @@ def apply_fullpage_template(page_template, content, page):
   )
   return full_page
 
+# description_content_reader - pulls both the long and short versions of the content out of the content file
+# stores the short content as the first list entry in short_descripton variable (this is available to the calling function)
+# stores the detailed content as the 1st entry in the detailed description variable (this is available to the calling funciton)
 def description_content_reader(content, short_description, detailed_description):
   description_type = None
   current_description = None
@@ -187,7 +190,7 @@ def description_content_reader(content, short_description, detailed_description)
     
 
 
-# Write a comment here
+# used to take a single event and apply the short description template to it
 def apply_event_template(event_template, event_template_dict):
   print("applying event template to", event_template_dict["EVENT_TITLE"])
   event_short_content = []
@@ -207,6 +210,7 @@ def apply_event_template(event_template, event_template_dict):
   )
   return event_entry
 
+# used to build the full content from multiple different singular event/space contents
 def apply_all_template(all_template, page_content):
   print("creating the events page")
   events_page = all_template.safe_substitute(
@@ -215,7 +219,7 @@ def apply_all_template(all_template, page_content):
 
   return events_page
 
-# Write a comment here
+# used to take a single space and apply the short description template to it
 def apply_space_template(space_template, space_template_dict):
   print("applying space template to", space_template_dict["SPACE_NAME"])
   space_short_content = []
