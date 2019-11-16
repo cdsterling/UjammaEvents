@@ -92,7 +92,7 @@ pages = [
     "ACTIVE_ABOUT" : "",
   },
   {
-    "content" : "content/spaces.html",
+    "content" : "content/spaces_using_template.html",
     "output" : "docs/spaces.html",
     "page_link" : "./spaces.html",
     "PAGE_TITLE" : "SPACES",
@@ -212,15 +212,14 @@ def apply_event_template(event_template, event_template_dict):
 
 # used to build the full content from multiple different singular event/space contents
 def apply_all_template(all_template, page_content):
-  print("creating the events page")
-  events_page = all_template.safe_substitute(
+  print("creating the content of the full page")
+  full_page_content = all_template.safe_substitute(
     ALL_CONTENT = page_content
   )
-
-  return events_page
+  return full_page_content
 
 # used to take a single space and apply the short description template to it
-def apply_space_template(space_template, space_template_dict):
+def apply_space_template(space_template, space_template_dict, fullpage_template, page):
   print("applying space template to", space_template_dict["SPACE_NAME"])
   space_short_content = []
   space_detailed_content = []
@@ -229,9 +228,17 @@ def apply_space_template(space_template, space_template_dict):
     SPACE_LOGO = space_template_dict["SPACE_LOGO"],
     SPACE_NAME = space_template_dict["SPACE_NAME"],
     SPACE_IMAGE = space_template_dict["SPACE_IMAGE"],
-    EVENT_PAGE_LINK = space_template_dict["SPACE_PAGE_LINK"],
+    SPACE_PAGE_LINK = space_template_dict["SPACE_PAGE_LINK"],
     SPACE_DESCRIPTION = space_short_content[0]
   )
+  print(space_entry)
+  chad = input("SPACE ENTRY ^^^^")
+  # Create the new space pages here
+  individual_space_page = apply_fullpage_template(fullpage_template, space_detailed_content[0], page)
+  write_file(individual_space_page, space_template_dict["output"])
+
+
+
   return space_entry
 
 # write_file takes html content (or really any content) and an output file to write to
@@ -256,10 +263,13 @@ def main():
       event_content = apply_all_template(full_event_template, event_content)
       full_page = apply_fullpage_template(fullpage_template, event_content, page)
       write_file(full_page, page["output"])
-    # elif page["PAGE_TITLE"] == "SPACES":
-    #   for space in spaces:
-    #     space_content += apply_space_template(space_template, space)
-    #   full_page = apply_fullpage_template(fullpage_template, space_content, page)
+    elif page["PAGE_TITLE"] == "SPACES":
+      for space in spaces:
+        space_content += apply_space_template(space_template, space, fullpage_template, page)
+      full_space_template = set_template(page["content"])
+      space_content = apply_all_template(full_space_template, space_content)
+      full_page = apply_fullpage_template(fullpage_template, space_content, page)
+      write_file(full_page, page["output"])
     else:
       full_page = apply_fullpage_template(fullpage_template, page["content"], page)
       write_file(full_page, page["output"])
