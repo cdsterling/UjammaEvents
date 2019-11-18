@@ -135,12 +135,14 @@ def set_template(template_file):
 # apply_fullpage_template takes a Template object and all of the 
 # template replacement strings for a page and returns 
 # the new page with the templated values replaced with the replacement strings
-def apply_fullpage_template(page_template, content, page):
+def apply_fullpage_template(page_template, page, content, content_type_is_filename=True):
   from datetime import datetime 
   print("applying template to:", page["PAGE_TITLE"])
-  print("----> Taking this content:",content)
-  if len(content) < 100:   #this is not the best way to determine if content was a filename or the actual content, but i can't think of a better way at the moment
+  
+  if content_type_is_filename:
+    print("----> Taking this content:",content)
     content = open(content).read()
+    
   full_page = page_template.safe_substitute(
     PAGE_TITLE=page["PAGE_TITLE"],
     ACTIVE_INDEX=page["ACTIVE_INDEX"],
@@ -233,10 +235,8 @@ def apply_space_template(space_template, space_template_dict, fullpage_template,
   )
   
   # Create the new space pages here
-  individual_space_page = apply_fullpage_template(fullpage_template, space_detailed_content[0], page)
+  individual_space_page = apply_fullpage_template(fullpage_template, page, space_detailed_content[0], False)
   write_file(individual_space_page, space_template_dict["output"])
-
-
 
   return space_entry
 
@@ -260,19 +260,18 @@ def main():
         event_content += ' '+ apply_event_template(event_template, event)
       full_event_template = set_template(page["content"])
       event_content = apply_all_template(full_event_template, event_content)
-      full_page = apply_fullpage_template(fullpage_template, event_content, page)
+      full_page = apply_fullpage_template(fullpage_template, page, event_content, False)
       write_file(full_page, page["output"])
     elif page["PAGE_TITLE"] == "SPACES":
       for space in spaces:
         space_content += apply_space_template(space_template, space, fullpage_template, page)
       full_space_template = set_template(page["content"])
       space_content = apply_all_template(full_space_template, space_content)
-      full_page = apply_fullpage_template(fullpage_template, space_content, page)
+      full_page = apply_fullpage_template(fullpage_template, page, space_content, False)
       write_file(full_page, page["output"])
     else:
-      full_page = apply_fullpage_template(fullpage_template, page["content"], page)
-      write_file(full_page, page["output"])
-    
+      full_page = apply_fullpage_template(fullpage_template, page, page["content"])
+      write_file(full_page, page["output"])    
   
 if __name__ == "__main__":
   main()
