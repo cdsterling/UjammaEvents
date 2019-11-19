@@ -253,15 +253,18 @@ def main():
     item_content = ""
     full_page = None
     page_title = page["PAGE_TITLE"]
+    #special caveat for spaces and events
     if page_title == "spaces" or page_title == "events" :
       if page_title == "events":
         for event in events:
+          #for events we use the apply_event_template function to build up the content
           item_content += ' '+ apply_event_template(event_template, event)
       elif page_title == "spaces":
         for space in spaces:
+          #for spaces we use the apply_space_template to build up the content
+          #note this function also builds out the individual space pages
           item_content += apply_space_template(space_template, space, fullpage_template, page)
       
-      # print("item _content:", item_content)
       full_item_template = set_template(page["content"])
       item_content =  apply_all_template(full_item_template, item_content)
       full_page = apply_fullpage_template(fullpage_template, page, item_content, False)
