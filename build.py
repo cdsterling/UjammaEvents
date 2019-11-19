@@ -95,22 +95,8 @@ def apply_fullpage_template(page_template, page, content, pages, content_type_is
   
   if content_type_is_filename:
     print("----> Taking this content:",content)
-    content = open(content).read()
-    
-  # full_page = page_template.render(
-  #   PAGE_TITLE=page["PAGE_TITLE"],
-  #   ACTIVE_INDEX=page["ACTIVE_INDEX"],
-  #   ACTIVE_SPACES=page["ACTIVE_SPACES"],
-  #   ACTIVE_EVENTS=page["ACTIVE_EVENTS"],
-  #   ACTIVE_ABOUT=page["ACTIVE_ABOUT"],
-  #   PAGE_CONTENT=content,
-  #   COPYRIGHT_YEAR=datetime.now().year,
-  #   INDEX_LINK=page_links["index_link"],
-  #   SPACES_LINK=page_links["spaces_link"],
-  #   EVENTS_LINK=page_links["events_link"],
-  #   ABOUT_LINK=page_links["about_link"]
-  # )
-  print(page)
+    content = open(content).read() 
+  
   # Each page in pages looks 
   # { 
   #  'ACTIVE_INDEX':'active',
@@ -122,17 +108,6 @@ def apply_fullpage_template(page_template, page, content, pages, content_type_is
   #  'output':'docs/index.html',
   #  'PAGE_TITLE':'index'
   # } 
-
-  print("page-----------")
-  print(page)
-
-  print("copywright year -----------")
-  print(datetime.now().year)
-  print("pageS ---------------")
-  print(pages)
-
-  print("spaces -----------------")
-  print(spaces)
   full_page = page_template.render(
     page=page,
     PAGE_CONTENT=content,
@@ -181,17 +156,22 @@ def apply_event_template(event_template, event_template_dict):
   event_short_content = []
   event_detailed_content = []
   description_content_reader(event_template_dict["content"], event_short_content, event_detailed_content)
+  # event_entry = event_template.render(
+  #   EVENT_IMAGE = event_template_dict["EVENT_IMAGE"],
+  #   EVENT_TITLE = event_template_dict["EVENT_TITLE"],
+  #   EVENT_DATES = event_template_dict["EVENT_DATES"],
+  #   EVENT_SPACE_NAME = event_template_dict["EVENT_SPACE_NAME"],
+  #   EVENT_SPACE_ADDRESS = event_template_dict["EVENT_SPACE_ADDRESS"],
+  #   EVENT_ORGANIZER = event_template_dict["EVENT_ORGANIZER"],
+  #   EVENT_EMAIL = event_template_dict["EVENT_EMAIL"],
+  #   EVENT_MODAL_ID = event_template_dict["EVENT_MODAL_ID"],
+  #   EVENT_DETAILS = event_short_content[0],
+  #   EVENT_EXTENDED_DETAILS= event_detailed_content[0]
+  # )
   event_entry = event_template.render(
-    EVENT_IMAGE = event_template_dict["EVENT_IMAGE"],
-    EVENT_TITLE = event_template_dict["EVENT_TITLE"],
-    EVENT_DATES = event_template_dict["EVENT_DATES"],
-    EVENT_SPACE_NAME = event_template_dict["EVENT_SPACE_NAME"],
-    EVENT_SPACE_ADDRESS = event_template_dict["EVENT_SPACE_ADDRESS"],
-    EVENT_ORGANIZER = event_template_dict["EVENT_ORGANIZER"],
-    EVENT_EMAIL = event_template_dict["EVENT_EMAIL"],
-    EVENT_MODAL_ID = event_template_dict["EVENT_MODAL_ID"],
+    ET = event_template_dict,
     EVENT_DETAILS = event_short_content[0],
-    EVENT_EXTENDED_DETAILS= event_detailed_content[0]
+    EVENT_EXTENDED_DETAILS = event_detailed_content[0]
   )
   return event_entry
 
