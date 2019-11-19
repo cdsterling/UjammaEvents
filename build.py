@@ -156,18 +156,6 @@ def apply_event_template(event_template, event_template_dict):
   event_short_content = []
   event_detailed_content = []
   description_content_reader(event_template_dict["content"], event_short_content, event_detailed_content)
-  # event_entry = event_template.render(
-  #   EVENT_IMAGE = event_template_dict["EVENT_IMAGE"],
-  #   EVENT_TITLE = event_template_dict["EVENT_TITLE"],
-  #   EVENT_DATES = event_template_dict["EVENT_DATES"],
-  #   EVENT_SPACE_NAME = event_template_dict["EVENT_SPACE_NAME"],
-  #   EVENT_SPACE_ADDRESS = event_template_dict["EVENT_SPACE_ADDRESS"],
-  #   EVENT_ORGANIZER = event_template_dict["EVENT_ORGANIZER"],
-  #   EVENT_EMAIL = event_template_dict["EVENT_EMAIL"],
-  #   EVENT_MODAL_ID = event_template_dict["EVENT_MODAL_ID"],
-  #   EVENT_DETAILS = event_short_content[0],
-  #   EVENT_EXTENDED_DETAILS= event_detailed_content[0]
-  # )
   event_entry = event_template.render(
     ET = event_template_dict,
     EVENT_DETAILS = event_short_content[0],
@@ -190,10 +178,7 @@ def apply_space_template(space_template, space_template_dict, fullpage_template,
   space_detailed_content = []
   description_content_reader(space_template_dict["content"],space_short_content, space_detailed_content)
   space_entry = space_template.render(
-    SPACE_LOGO = space_template_dict["SPACE_LOGO"],
-    SPACE_NAME = space_template_dict["SPACE_NAME"],
-    SPACE_IMAGE = space_template_dict["SPACE_IMAGE"],
-    SPACE_PAGE_LINK = space_template_dict["SPACE_PAGE_LINK"],
+    ST = space_template_dict,
     SPACE_DESCRIPTION = space_short_content[0]
   )
   
