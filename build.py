@@ -1,7 +1,10 @@
-# Note this file originated from ./scriptArchive/build_advanced2.py
+from datetime import datetime
+from string import Template
+import glob
+import os
 
 
-# This is a list of dictionaries that contain data about my pages
+
 page_links = {
   "index_link" : "./index.html",
   "spaces_link" : "./spaces.html",
@@ -80,55 +83,10 @@ spaces = [
 
 ]
 
-pages = [
-  {
-    "content" : "content/index.html",
-    "output" : "docs/index.html",
-    "PAGE_TITLE" : "WELCOME",
-    "page_link" : "./index.html",
-    "ACTIVE_INDEX" : "active",
-    "ACTIVE_SPACES" : "",
-    "ACTIVE_EVENTS" : "",
-    "ACTIVE_ABOUT" : "",
-  },
-  {
-    "content" : "content/spaces_using_template.html",
-    "output" : "docs/spaces.html",
-    "page_link" : "./spaces.html",
-    "PAGE_TITLE" : "SPACES",
-    "ACTIVE_INDEX" : "",
-    "ACTIVE_SPACES" : "active",
-    "ACTIVE_EVENTS" : "",
-    "ACTIVE_ABOUT" : "",
-  },
-  {
-    "content" : "content/events_using_template.html",
-    "output" : "docs/events.html",
-    "page_link" : "./events.html",
-    "PAGE_TITLE" : "EVENTS",
-    "ACTIVE_INDEX" : "",
-    "ACTIVE_SPACES" : "",
-    "ACTIVE_EVENTS" : "active",
-    "ACTIVE_ABOUT" : "",
-  },
-  {
-    "content" : "content/about.html",
-    "output" : "docs/about.html",
-    "page_link" : "./about.html",
-    "PAGE_TITLE" : "ABOUT",
-    "ACTIVE_INDEX" : "",
-    "ACTIVE_SPACES" : "",
-    "ACTIVE_EVENTS" : "",
-    "ACTIVE_ABOUT" : "active",
-  },
-]
-
-
 # set template takes the file name of a template file, 
 # reads it and uses that to creates a object of Type Template
 def set_template(template_file):
   page_template = open(template_file).read()
-  from string import Template
   my_template = Template(page_template)
   return my_template
 
@@ -136,7 +94,7 @@ def set_template(template_file):
 # template replacement strings for a page and returns 
 # the new page with the templated values replaced with the replacement strings
 def apply_fullpage_template(page_template, page, content, content_type_is_filename=True):
-  from datetime import datetime 
+   
   print("applying template to:", page["PAGE_TITLE"])
   
   if content_type_is_filename:
@@ -246,23 +204,72 @@ def write_file(html_page, output):
   open(output, 'w+').write(html_page)
 
 
+
+
+#TODO: comment for this function
+def find_all_files(directory):
+  all_files = glob.glob(directory+"/*.*")
+  return(all_files)
+
+def build_pages_list(all_content_dict):  
+
+  page_dict = {}
+  page_dict.update({"ACTIVE_INDEX" : ""}),
+  page_dict.update({"ACTIVE_SPACES" : ""}),
+  page_dict.update({"ACTIVE_EVENTS" : ""}),
+  page_dict.update({"ACTIVE_ABOUT" : ""}),
+
+  files = find_all_files("content")
+  print("--------",files)
+  for file_path in files:
+    page_dict = {}
+    page_dict.update({"ACTIVE_INDEX" : ""}),
+    page_dict.update({"ACTIVE_SPACES" : ""}),
+    page_dict.update({"ACTIVE_EVENTS" : ""}),
+    page_dict.update({"ACTIVE_ABOUT" : ""}),
+    print("------------ File Path",file_path)
+    file_name = os.path.basename(file_path)
+    print("----------------File Name",file_name)
+    name_only, extension = os.path.splitext(file_name)
+    print("----------------",name_only)
+    page_dict.update({"content": file_path})
+    page_dict.update({"page_link" : file_name})
+    page_dict.update({"output": "docs/"+file_name})
+    page_dict.update({"PAGE_TITLE": name_only})
+
+    active_page_switch = {
+      "index" : "ACTIVE_INDEX",
+      "events" : "ACTIVE_EVENTS",
+      "about" : "ACTIVE_ABOUT",
+      "spaces": "ACTIVE_SPACES",
+    }
+    page_dict.update({active_page_switch.get(name_only): "active"})
+    all_content_dict.append(page_dict)
+    print(all_content_dict)
+      
+
+
 # Main
 def main():
   fullpage_template = set_template('templates/whole_page_template.html')
   event_template = set_template('templates/event_template.html')
   space_template = set_template('templates/space_template.html')
+  pages = []
+
+  build_pages_list(pages)
+
   for page in pages:
     event_content = ""
     space_content = ""
     full_page = None
-    if page["PAGE_TITLE"] == "EVENTS":
+    if page["PAGE_TITLE"] == "events":
       for event in events:
         event_content += ' '+ apply_event_template(event_template, event)
       full_event_template = set_template(page["content"])
       event_content = apply_all_template(full_event_template, event_content)
       full_page = apply_fullpage_template(fullpage_template, page, event_content, False)
       write_file(full_page, page["output"])
-    elif page["PAGE_TITLE"] == "SPACES":
+    elif page["PAGE_TITLE"] == "spaces":
       for space in spaces:
         space_content += apply_space_template(space_template, space, fullpage_template, page)
       full_space_template = set_template(page["content"])
