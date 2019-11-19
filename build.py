@@ -1,5 +1,5 @@
 from datetime import datetime
-from string import Template
+from jinja2 import Template
 import glob
 import os
 
@@ -97,7 +97,7 @@ def apply_fullpage_template(page_template, page, content, content_type_is_filena
     print("----> Taking this content:",content)
     content = open(content).read()
     
-  full_page = page_template.safe_substitute(
+  full_page = page_template.render(
     PAGE_TITLE=page["PAGE_TITLE"],
     ACTIVE_INDEX=page["ACTIVE_INDEX"],
     ACTIVE_SPACES=page["ACTIVE_SPACES"],
@@ -152,7 +152,7 @@ def apply_event_template(event_template, event_template_dict):
   event_short_content = []
   event_detailed_content = []
   description_content_reader(event_template_dict["content"], event_short_content, event_detailed_content)
-  event_entry = event_template.safe_substitute(
+  event_entry = event_template.render(
     EVENT_IMAGE = event_template_dict["EVENT_IMAGE"],
     EVENT_TITLE = event_template_dict["EVENT_TITLE"],
     EVENT_DATES = event_template_dict["EVENT_DATES"],
@@ -169,7 +169,7 @@ def apply_event_template(event_template, event_template_dict):
 # used to build the full content from multiple different singular event/space contents
 def apply_all_template(all_template, page_content):
   print("creating the content of the full page")
-  full_page_content = all_template.safe_substitute(
+  full_page_content = all_template.render(
     ALL_CONTENT = page_content
   )
   return full_page_content
@@ -180,7 +180,7 @@ def apply_space_template(space_template, space_template_dict, fullpage_template,
   space_short_content = []
   space_detailed_content = []
   description_content_reader(space_template_dict["content"],space_short_content, space_detailed_content)
-  space_entry = space_template.safe_substitute(
+  space_entry = space_template.render(
     SPACE_LOGO = space_template_dict["SPACE_LOGO"],
     SPACE_NAME = space_template_dict["SPACE_NAME"],
     SPACE_IMAGE = space_template_dict["SPACE_IMAGE"],
