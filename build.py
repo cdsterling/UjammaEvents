@@ -4,7 +4,6 @@ import glob
 import os
 
 
-
 page_links = {
   "index_link" : "./index.html",
   "spaces_link" : "./spaces.html",
@@ -50,8 +49,7 @@ events = [
     "EVENT_ORGANIZER_URL": "https://www.facebook.com/MenOfSubstanceMag/",
     "EVENT_EMAIL" : "menofsubstancemag@gmail.com",
     "EVENT_MODAL_ID" : "black_to_yoga",
-  },
-   
+  }, 
 ]
 
 spaces = [
@@ -79,8 +77,6 @@ spaces = [
     "SPACE_IMAGE" : "./images/spaces/sae_outdoor.jpg",
     "SPACE_PAGE_LINK" : "./SAE_Expression_College.html",
   }
-
-
 ]
 
 # set template takes the file name of a template file, 
@@ -206,19 +202,14 @@ def write_file(html_page, output):
 
 
 
-#TODO: comment for this function
+#use glob to find all of the files in the given directory
 def find_all_files(directory):
   all_files = glob.glob(directory+"/*.*")
   return(all_files)
 
+# Auto generate the pages list of dictionaries. 
+# pages list of dicts is taken in as function parameter all_content_dict
 def build_pages_list(all_content_dict):  
-
-  page_dict = {}
-  page_dict.update({"ACTIVE_INDEX" : ""}),
-  page_dict.update({"ACTIVE_SPACES" : ""}),
-  page_dict.update({"ACTIVE_EVENTS" : ""}),
-  page_dict.update({"ACTIVE_ABOUT" : ""}),
-
   files = find_all_files("content")
   print("--------",files)
   for file_path in files:
@@ -259,22 +250,21 @@ def main():
   build_pages_list(pages)
 
   for page in pages:
-    event_content = ""
-    space_content = ""
+    item_content = ""
     full_page = None
-    if page["PAGE_TITLE"] == "events":
-      for event in events:
-        event_content += ' '+ apply_event_template(event_template, event)
-      full_event_template = set_template(page["content"])
-      event_content = apply_all_template(full_event_template, event_content)
-      full_page = apply_fullpage_template(fullpage_template, page, event_content, False)
-      write_file(full_page, page["output"])
-    elif page["PAGE_TITLE"] == "spaces":
-      for space in spaces:
-        space_content += apply_space_template(space_template, space, fullpage_template, page)
-      full_space_template = set_template(page["content"])
-      space_content = apply_all_template(full_space_template, space_content)
-      full_page = apply_fullpage_template(fullpage_template, page, space_content, False)
+    page_title = page["PAGE_TITLE"]
+    if page_title == "spaces" or page_title == "events" :
+      if page_title == "events":
+        for event in events:
+          item_content += ' '+ apply_event_template(event_template, event)
+      elif page_title == "spaces":
+        for space in spaces:
+          item_content += apply_space_template(space_template, space, fullpage_template, page)
+      
+      # print("item _content:", item_content)
+      full_item_template = set_template(page["content"])
+      item_content =  apply_all_template(full_item_template, item_content)
+      full_page = apply_fullpage_template(fullpage_template, page, item_content, False)
       write_file(full_page, page["output"])
     else:
       full_page = apply_fullpage_template(fullpage_template, page, page["content"])
