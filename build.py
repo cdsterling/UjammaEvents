@@ -89,7 +89,7 @@ def set_template(template_file):
 # apply_fullpage_template takes a Template object and all of the 
 # template replacement strings for a page and returns 
 # the new page with the templated values replaced with the replacement strings
-def apply_fullpage_template(page_template, page, content, content_type_is_filename=True):
+def apply_fullpage_template(page_template, page, content, pages, content_type_is_filename=True):
    
   print("applying template to:", page["PAGE_TITLE"])
   
@@ -97,19 +97,48 @@ def apply_fullpage_template(page_template, page, content, content_type_is_filena
     print("----> Taking this content:",content)
     content = open(content).read()
     
+  # full_page = page_template.render(
+  #   PAGE_TITLE=page["PAGE_TITLE"],
+  #   ACTIVE_INDEX=page["ACTIVE_INDEX"],
+  #   ACTIVE_SPACES=page["ACTIVE_SPACES"],
+  #   ACTIVE_EVENTS=page["ACTIVE_EVENTS"],
+  #   ACTIVE_ABOUT=page["ACTIVE_ABOUT"],
+  #   PAGE_CONTENT=content,
+  #   COPYRIGHT_YEAR=datetime.now().year,
+  #   INDEX_LINK=page_links["index_link"],
+  #   SPACES_LINK=page_links["spaces_link"],
+  #   EVENTS_LINK=page_links["events_link"],
+  #   ABOUT_LINK=page_links["about_link"]
+  # )
+  print(page)
+  # Each page in pages looks 
+  # { 
+  #  'ACTIVE_INDEX':'active',
+  #  'ACTIVE_SPACES':'',
+  #  'ACTIVE_EVENTS':'',
+  #  'ACTIVE_ABOUT':'',
+  #  'content':'content/index.html',
+  #  'page_link':'index.html',
+  #  'output':'docs/index.html',
+  #  'PAGE_TITLE':'index'
+  # } 
+
+  print("page-----------")
+  print(page)
+
+  print("copywright year -----------")
+  print(datetime.now().year)
+  print("pageS ---------------")
+  print(pages)
+
+  print("spaces -----------------")
+  print(spaces)
   full_page = page_template.render(
-    PAGE_TITLE=page["PAGE_TITLE"],
-    ACTIVE_INDEX=page["ACTIVE_INDEX"],
-    ACTIVE_SPACES=page["ACTIVE_SPACES"],
-    ACTIVE_EVENTS=page["ACTIVE_EVENTS"],
-    ACTIVE_ABOUT=page["ACTIVE_ABOUT"],
+    page=page,
     PAGE_CONTENT=content,
     COPYRIGHT_YEAR=datetime.now().year,
-    INDEX_LINK=page_links["index_link"],
-    SPACES_LINK=page_links["spaces_link"],
-    EVENTS_LINK=page_links["events_link"],
-    ABOUT_LINK=page_links["about_link"]
-
+    pages=pages,
+    spaces=spaces,
   )
   return full_page
 
@@ -175,7 +204,7 @@ def apply_all_template(all_template, page_content):
   return full_page_content
 
 # used to take a single space and apply the short description template to it
-def apply_space_template(space_template, space_template_dict, fullpage_template, page):
+def apply_space_template(space_template, space_template_dict, fullpage_template, page, pages):
   print("applying space template to", space_template_dict["SPACE_NAME"])
   space_short_content = []
   space_detailed_content = []
@@ -189,7 +218,7 @@ def apply_space_template(space_template, space_template_dict, fullpage_template,
   )
   
   # Create the new space pages here
-  individual_space_page = apply_fullpage_template(fullpage_template, page, space_detailed_content[0], False)
+  individual_space_page = apply_fullpage_template(fullpage_template, page, space_detailed_content[0], pages, False)
   write_file(individual_space_page, space_template_dict["output"])
 
   return space_entry
@@ -263,14 +292,14 @@ def main():
         for space in spaces:
           #for spaces we use the apply_space_template to build up the content
           #note this function also builds out the individual space pages
-          item_content += apply_space_template(space_template, space, fullpage_template, page)
+          item_content += apply_space_template(space_template, space, fullpage_template, page, pages)
       
       full_item_template = set_template(page["content"])
       item_content =  apply_all_template(full_item_template, item_content)
-      full_page = apply_fullpage_template(fullpage_template, page, item_content, False)
+      full_page = apply_fullpage_template(fullpage_template, page, item_content, pages, False)
       write_file(full_page, page["output"])
     else:
-      full_page = apply_fullpage_template(fullpage_template, page, page["content"])
+      full_page = apply_fullpage_template(fullpage_template, page, page["content"], pages)
       write_file(full_page, page["output"])    
   
 if __name__ == "__main__":
