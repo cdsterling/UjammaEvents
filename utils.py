@@ -225,6 +225,11 @@ def build_pages_list(all_content_dict):
     page_dict.update({active_page_switch.get(name_only): "active"})
     all_content_dict.append(page_dict)
     print(all_content_dict)
+
+def create_new_content():
+  new_content= '''<h1>New Content!</h1>
+<p>New content...</p>'''
+  write_file(new_content, "./content/new_content_page.html")
       
 def build_site(pages, fullpage_template, event_template, space_template):
   for page in pages:

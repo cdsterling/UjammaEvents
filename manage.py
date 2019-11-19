@@ -7,11 +7,21 @@ import sys
 # Main
 def main():
   command = None
+  print("command line:", sys.argv)
 
-  if len(sys.argv) > 2:
+  if len(sys.argv) == 1:
+    print('''
+    Usage:
+      Rebuild site: python manage.py build
+      Create new page: python manage.py new)
+      ''')
+    return
+  elif len(sys.argv) >= 2:
     command = sys.argv[1]
+  
 
   while True:
+    print("evaluating command:", command)
     if command == "build":
       fullpage_template = utils.set_template('templates/whole_page_template.html')
       event_template = utils.set_template('templates/event_template.html')
