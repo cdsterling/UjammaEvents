@@ -2,13 +2,13 @@
 
 <div class="row mb-2">
   <div class="col-5">
-    <img src="${EVENT_IMAGE}" class="img-fluid img-thumbnail" />
+    <img src="{{ET.EVENT_IMAGE}}" class="img-fluid img-thumbnail" />
   </div>
   
   <div class="col">
     <div class="row">
       <div class="col">
-        <h1 class="text-center" data-toggle="modal" data-target="#${EVENT_MODAL_ID}">${EVENT_TITLE}</h1>    
+        <h1 class="text-center" data-toggle="modal" data-target="#{{ET.EVENT_MODAL_ID}}">{{ET.EVENT_TITLE}}</h1>    
       </div>
     </div>  
     <div class="row"> <!-- Date Row-->
@@ -16,7 +16,7 @@
         <p>Dates</p>
       </div>
       <div class="col">
-          <h4>${EVENT_DATES}</h4>    
+          <h4>{{ET.EVENT_DATES}}</h4>    
         </div>
     </div>
     <div class="row"> <!-- Location Row-->
@@ -24,8 +24,8 @@
         <p>Location:</p>
       </div>
       <div class="col">
-        <h4>${EVENT_SPACE_NAME}</h4>
-        <h5>${EVENT_SPACE_ADDRESS}</h5> 
+        <h4>{{ET.EVENT_SPACE_NAME}}</h4>
+        <h5>{{ET.EVENT_SPACE_ADDRESS}}</h5> 
       </div>
     </div>
     <div class="row"> <!-- Presented By Row-->
@@ -33,8 +33,8 @@
         <p>Presented by:</p>
       </div>
       <div class="col">
-        <h4>${EVENT_ORGANIZER}</h4>
-        <p><a href="${EVENT_EMAIL}" target="_blank">${EVENT_EMAIL}</a></p>
+        <h4>{{ET.EVENT_ORGANIZER}}</h4>
+        <p><a href="{{ET.EVENT_EMAIL}}" target="_blank">{{ET.EVENT_EMAIL}}</a></p>
       </div>
     </div>
     <div class="row">
@@ -42,23 +42,23 @@
         <p>Details</p>
       </div>
       <div class="col">
-        <p>${EVENT_DETAILS}</p>
+        <p>{{EVENT_DETAILS}}</p>
       </div>
     </div>
   </div>
 </div>
 
-<div class="modal fade" id="${EVENT_MODAL_ID}" tabindex="-1" role="dialog" aria-labelledby="${EVENT_MODAL_ID}Title" aria-hidden="true">
+<div class="modal fade" id="{{ET.EVENT_MODAL_ID}}" tabindex="-1" role="dialog" aria-labelledby="{{ET.EVENT_MODAL_ID}}Title" aria-hidden="true">
   <div class="modal-dialog modal-dialog-scrollable" role="document">
     <div class="modal-content">
       <div class="modal-header">
-        <h5 class="modal-title" id="${EVENT_MODAL_ID}Title">${EVENT_TITLE}</h5>
+        <h5 class="modal-title" id="{{ET.EVENT_MODAL_ID}}Title">{{ET.EVENT_TITLE}}</h5>
         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
           <span aria-hidden="true">&times;</span>
         </button>
       </div>
       <div class="modal-body">
-        ${EVENT_EXTENDED_DETAILS}
+        {{EVENT_EXTENDED_DETAILS}}
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
